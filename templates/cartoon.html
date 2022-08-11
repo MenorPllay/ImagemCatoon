@@ -1,0 +1,185 @@
+{% extends "model-page.html" %}
+
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<h1 class="text-center">Cartoon</h1>
+
+<form enctype="multipart/form-data" action="create", method="POST" id="post-from">
+    {% csrf_token %}
+    <div class="container mb-12">
+        <div class="form-group">
+            <input type="file" id="name" name="photo" class="form-control-file border" accept=".jpeg,.png,.jpg">
+            <!-- <input type="file" id="name" name="photo" class="form-control-file border" accept="image/*"> -->
+        </div>
+        <div class="container  mb-4">
+            <input type="submit" >
+        </div>
+    </div>
+</form>
+
+
+<div id="loading" class="text-center mt-3 not-visible">
+    <div class="spinner-border text-primary" role="status">
+    </div>
+    <div>
+        <p>Carregando...</p>
+    </div>
+</div>
+
+
+<div class="container mb-4">
+    <div class="row">
+            <div class="col-sm-4">
+                <div class="polaroid" id="img1">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="polaroid" id="img2">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="polaroid" id="img3">
+                </div>
+            </div>
+    </div>
+</div>
+
+<script>
+    const load = document.getElementById('loading')
+    load.classList.add('not-visible')
+</script>
+
+<script>
+
+    $('#post-from').submit(function(e){
+        
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+            $.ajax({
+                type:'POST',
+                url:"/create",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                // success: function(){
+                    // load.classList.remove('not-visible')
+                // }
+            });
+    });
+</script>
+
+
+<script>    
+
+    
+
+    $(document).submit(function(){
+        $.ajax({
+            type:'GET',
+            url:"{% url 'getprofile' %}",
+
+            beforeSend: function() {
+                load.classList.remove('not-visible')
+            },
+
+            // complete: function(){
+            //     load.classList.add('not-visible')
+            // },
+
+
+
+            success: function(response){
+                setTimeout(()=>{
+                    $("#img1").empty();
+                    $("#img2").empty();
+                    $("#img3").empty();
+
+                    load.classList.add('not-visible')
+
+                    var input = document.querySelector("#name");
+                    var texto = input.value;
+                    var texto = texto.split("\\");
+                    var texto = texto[texto.length-1];
+
+                    while (texto.includes(' ')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace(' ', '_');
+                            
+                        }
+                    }
+                    while (texto.includes('(')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace('(', '');
+                            
+                        }
+                    }
+                    while (texto.includes(')')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace(')', '');
+                            
+                        }
+                    }
+                    while (texto.includes('#')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace('#', '');
+                            
+                        }
+                    }
+                    while (texto.includes('^')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace('^', '');
+                            
+                        }
+                    }
+                    while (texto.includes(';')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace(';', '');
+                            
+                        }
+                    }
+                    while (texto.includes('%')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace('%', '');
+                            
+                        }
+                    }
+                    while (texto.includes('$')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace('$', '');
+                            
+                        }
+                    }
+                    while (texto.includes('~')) {
+                        for (let i = 0;i < 1; i++) {
+                            var texto = texto.replace('~', '');
+                            
+                        }
+                    }
+
+                    var temp1="<h2><li>" + '<a href="/media/photo/' + texto + '" download="imagem.png">Sua Imagem</a>' + '</li></h2><br><img src="/media/photo/' + texto + '" style="width: 300px;">';
+                    var temp2="<h2><li>" + '<a href="/media/photo/' + texto + '-Cartoon.jpeg" download="imagem.png">Cartoon</a>' + '</li></h2><br><img src="/media/photo/' + texto + '-Cartoon.jpeg" style="width: 300px;">';
+                    var temp3="<h2><li>" + '<a href="/media/photo/' + texto + '-edges.jpeg" download="imagem.png">Edges</a>' + '</li></h2><br><img src="/media/photo/' + texto + '-edges.jpeg" style="width: 300px;">';
+
+                    $("#img1").append(temp1);
+                    $("#img2").append(temp2);
+                    $("#img3").append(temp3);
+                }, 500)
+
+            }
+        })
+    })
+</script>
+
+{% endblock %}

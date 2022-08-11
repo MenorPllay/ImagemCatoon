@@ -1,0 +1,22 @@
+<h1>subprocessos admin</h1>
+
+<form action="submit">
+    <div class="">
+        <h4>deletar todas as imagens cache manualmente</h4>
+        <!-- <input type="submit" title="deletar" > -->
+        <button class="submit" title="deletar">deletar</button><p id="numeroimg">
+            {% if quantidade > 1 %}
+            tem {{ quantidade }} imagens armazenadas.
+            {% elif quantidade == 1 %}
+            tem {{ quantidade }} imagem armazenada.
+            {% elif quantidade == 0 %}
+            não tem nenhuma imagem armazenada.
+            {% endif %}
+        </p>
+    </div>
+</form>
+
+
+<script>
+
+</script>
